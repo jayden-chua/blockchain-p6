@@ -4,6 +4,11 @@ The capstone will build upon the knowledge you have gained in the course in orde
 
 # Project Resources
 
+* Node version 10.16.3
+* npm version 6.9.0
+* Truffle v5.0.6 (core: 5.0.6)
+* Solidity v0.5.0 (solc-js)
+
 * [Remix - Solidity IDE](https://remix.ethereum.org/)
 * [Visual Studio Code](https://code.visualstudio.com/)
 * [Truffle Framework](https://truffleframework.com/)
