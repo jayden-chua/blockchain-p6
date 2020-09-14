@@ -13,11 +13,31 @@ contract Ownable {
     //  3) create an 'onlyOwner' modifier that throws if called by any account other than the owner.
     //  4) fill out the transferOwnership function
     //  5) create an event that emits anytime ownerShip is transfered (including in the constructor)
+    address private _owner;
+
+    event OwnershipTransfered(address originalOwner, address newOwner);
+
+    modifier onlyOwner()
+    {
+        require(msg.sender != _owner, 'Only contract owner can call this funtion');
+        _;
+    } 
+
+    function __constructor internal (owner)
+    {
+        _owner = owner;
+    }
 
     function transferOwnership(address newOwner) public onlyOwner {
         // TODO add functionality to transfer control of the contract to a newOwner.
         // make sure the new owner is a real address
+        _owner = newOwner;
+    }
 
+    function getOwner()
+        returns(address)
+    {
+        return _owner;
     }
 }
 
