@@ -518,12 +518,22 @@ contract ERC721Metadata is ERC721Enumerable, usingOraclize {
     }
 
     // TODO: create external getter functions for name, symbol, and baseTokenURI
+    function getName() public view returns(string memory) {
+        return _name;
+    }
+
+    function getSymbol() public view returns(string memory) {
+        return _symbol;
+    }
+
+    function getBaseTokenURI() public view returns(string memory) {
+        return _baseTokenURI;
+    }
 
     function tokenURI(uint256 tokenId) external view returns (string memory) {
         require(_exists(tokenId));
         return _tokenURIs[tokenId];
     }
-
 
     // TODO: Create an internal function to set the tokenURI of a specified tokenId
     // It should be the _baseTokenURI + the tokenId in string form
@@ -546,6 +556,20 @@ contract ERC721Metadata is ERC721Enumerable, usingOraclize {
 //      -takes in a 'to' address, tokenId, and tokenURI as parameters
 //      -returns a true boolean upon completion of the function
 //      -calls the superclass mint and setTokenURI functions
+contract CustomERC721Token is ERC721Metadata {
 
+    string private _baseTokenURI = 'https://s3-us-west-2.amazonaws.com/udacity-blockchain/capstone/';
+
+    constructor(string memory name, string memory symbol) ERC721Metadata(name, symbol, _baseTokenURI) public {
+
+    }
+
+    function mint(address to, uint256 tokenId) public onlyOwner() returns(bool) {
+        _mint(to, tokenId);
+        setTokenURI(tokenId);
+        return true;
+    }
+
+}
 
 
