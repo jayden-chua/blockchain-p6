@@ -34,7 +34,7 @@ contract Ownable {
         _owner = newOwner;
     }
 
-    function getOwner() public
+    function getOwner() view public
         returns(address)
     {
         return _owner;
