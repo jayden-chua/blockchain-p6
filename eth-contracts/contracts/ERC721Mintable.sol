@@ -19,13 +19,13 @@ contract Ownable {
 
     modifier onlyOwner()
     {
-        require(msg.sender != _owner, 'Only contract owner can call this funtion');
+        require(msg.sender == _owner, 'Only contract owner can call this funtion');
         _;
     }
 
-    constructor (address owner) internal
+    constructor () internal
     {
-        _owner = owner;
+        _owner = msg.sender;
     }
 
     function transferOwnership(address newOwner) public onlyOwner {
@@ -278,7 +278,7 @@ contract ERC721 is Pausable, ERC165 {
         require(to.isContract() == false, 'Destination address invalid');
 
         // TODO: clear approval
-        delete _tokenApprovals[tokenId];
+        _clearApproval(tokenId);
 
         // TODO: update token counts & transfer ownership of the token ID
         _tokenOwner[tokenId] = to;
@@ -531,7 +531,7 @@ contract ERC721Metadata is ERC721Enumerable, usingOraclize {
     }
 
     function tokenURI(uint256 tokenId) external view returns (string memory) {
-        require(_exists(tokenId));
+        require(_exists(tokenId), 'Token does not exist');
         return _tokenURIs[tokenId];
     }
 
@@ -541,9 +541,9 @@ contract ERC721Metadata is ERC721Enumerable, usingOraclize {
     // TIP #2: you can also use uint2str() to convert a uint to a string
         // see https://github.com/oraclize/ethereum-api/blob/master/oraclizeAPI_0.5.sol for strConcat()
     // require the token exists before setting
-    function setTokenURI(uint256 tokenId) internal {
+    function _setTokenURI(uint256 tokenId) internal {
         require(_exists(tokenId));
-        _tokenURIs[tokenId] = strConcat(_baseTokenURI, uint2str(tokenId));
+        _tokenURIs[tokenId] = usingOraclize.strConcat(_baseTokenURI, usingOraclize.uint2str(tokenId));
     }
 
 }
@@ -551,25 +551,17 @@ contract ERC721Metadata is ERC721Enumerable, usingOraclize {
 //  TODO's: Create CustomERC721Token contract that inherits from the ERC721Metadata contract. You can name this contract as you please
 //  1) Pass in appropriate values for the inherited ERC721Metadata contract
 //      - make the base token uri: https://s3-us-west-2.amazonaws.com/udacity-blockchain/capstone/
-//  2) create a public mint() that does the following:
-//      -can only be executed by the contract owner
-//      -takes in a 'to' address, tokenId, and tokenURI as parameters
-//      -returns a true boolean upon completion of the function
-//      -calls the superclass mint and setTokenURI functions
-contract CustomERC721Token is ERC721Metadata {
-
-    string private _baseTokenURI = 'https://s3-us-west-2.amazonaws.com/udacity-blockchain/capstone/';
-
-    constructor(string memory name, string memory symbol) ERC721Metadata(name, symbol, _baseTokenURI) public {
-
-    }
-
+contract CustomERC721Token is ERC721Metadata ('SomeToken', 'ST', 'https://s3-us-west-2.amazonaws.com/udacity-blockchain/capstone/') {
+    //  2) create a public mint() that does the following:
+    //      -can only be executed by the contract owner
+    //      -takes in a 'to' address, tokenId, and tokenURI as parameters
+    //      -returns a true boolean upon completion of the function
+    //      -calls the superclass mint and setTokenURI functions
     function mint(address to, uint256 tokenId) public onlyOwner() returns(bool) {
-        _mint(to, tokenId);
-        setTokenURI(tokenId);
+        super._mint(to, tokenId);
+        super._setTokenURI(tokenId);
         return true;
     }
-
 }
 
 
