@@ -1,0 +1,9 @@
+{
+    "CustomERC721Token": "0xE6A2aA64aafB682a8Da3A680D7c6E411b035854f",
+    "SquareVerifier": "0xA9EbBE2a84D8ea0BaDC366d98734f1b11B23ec5B",
+    "SolnSquareVerifier": "0x04F5b27ce1a28F3dF83c9e7363611b89331aD2Cd",
+    "infuraKey": "c737e63a42dc4df5a43226be32801c4e",
+    "mnemonic": "language tragic drift envelope damp vapor tube rotate prevent attend use nature",
+    "gas": 4500000,
+    "gasPrice": 10000000000
+}
